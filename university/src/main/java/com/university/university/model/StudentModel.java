@@ -24,6 +24,7 @@ public class StudentModel {
 
     public StudentModel(String name, String deg) {
         this.name = name;
+        this.degree = deg;
     }
 
     public Long getId() {

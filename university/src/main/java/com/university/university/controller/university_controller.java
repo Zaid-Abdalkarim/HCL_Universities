@@ -6,12 +6,14 @@ import com.university.university.model.StudentModel;
 import com.university.university.model.UniversityModel;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class university_controller {
@@ -44,5 +46,11 @@ public class university_controller {
 
         Long universityId = Long.parseLong(id);
         universityService.deleteById(universityId);
+    }
+
+    @GetMapping("/university/{id}")
+    public List<StudentModel> allStudentsAttendingUniversityX(@PathVariable String id) {
+        Optional<UniversityModel> uni = universityService.find(Long.parseLong(id));
+        return studentService.findByUniversity(uni.get());
     }
 }

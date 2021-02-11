@@ -1,6 +1,7 @@
 package com.university.university.service;
 
 import com.university.university.model.StudentModel;
+import com.university.university.model.UniversityModel;
 import com.university.university.repo.StudentRepo;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,5 +45,19 @@ public class StudentService {
 
     public void deleteById(Long universityId) {
         studentRepo.deleteById(universityId);
+    }
+
+    public List<StudentModel> findByUniversity(UniversityModel uni) {
+        List<StudentModel> it = (List<StudentModel>) studentRepo.findAll();
+
+        List<StudentModel> studentsAttending = new ArrayList<StudentModel>();
+
+        it.forEach(e -> {
+            if (!studentsAttending.contains(studentRepo.findByUniversity(uni))) {
+                studentsAttending.add(studentRepo.findByUniversity(uni));
+            }
+        });
+
+        return studentsAttending;
     }
 }

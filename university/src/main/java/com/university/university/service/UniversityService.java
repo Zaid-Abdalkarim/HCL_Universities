@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.management.Query;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -46,4 +47,5 @@ public class UniversityService {
     public void deleteById(Long universityId) {
         universityRepo.deleteById(universityId);
     }
+
 }

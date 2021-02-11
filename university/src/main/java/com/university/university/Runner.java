@@ -42,7 +42,7 @@ public class Runner implements CommandLineRunner {
         StudentModel model = new StudentModel("name", "deg");
         model.setUniversity(u1);
         studentRepo.save(model);
-        model = new StudentModel("name2", "deg");
+        model = new StudentModel("Zaid", "computer science");
         model.setUniversity(u2);
         studentRepo.save(model);
         model = new StudentModel("name3", "deg");
