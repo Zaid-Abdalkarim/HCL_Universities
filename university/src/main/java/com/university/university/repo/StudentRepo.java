@@ -2,13 +2,13 @@ package com.university.university.repo;
 
 import java.util.Optional;
 
-import com.university.university.model.UniversityModel;
+import com.university.university.model.StudentModel;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UniversityRepo extends CrudRepository<UniversityModel, Long> {
+public interface StudentRepo extends CrudRepository<StudentModel, Long> {
 
-    Optional<UniversityModel> findById(Long id);
+    Optional<StudentModel> findById(Long id);
 }

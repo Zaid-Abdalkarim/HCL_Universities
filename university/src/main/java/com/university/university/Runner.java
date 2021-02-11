@@ -2,7 +2,9 @@ package com.university.university;
 
 import javax.transaction.Transactional;
 
+import com.university.university.model.StudentModel;
 import com.university.university.model.UniversityModel;
+import com.university.university.repo.StudentRepo;
 import com.university.university.repo.UniversityRepo;
 
 import org.slf4j.Logger;
@@ -19,6 +21,9 @@ public class Runner implements CommandLineRunner {
     @Autowired
     private UniversityRepo universityRepo;
 
+    @Autowired
+    private StudentRepo studentRepo;
+
     @Override
     @Transactional
     public void run(String... args) throws Exception {
@@ -33,5 +38,15 @@ public class Runner implements CommandLineRunner {
 
         var u3 = new UniversityModel("STANFORD");
         universityRepo.save(u3);
+
+        StudentModel model = new StudentModel("name", "deg");
+        model.setUniversity(u1);
+        studentRepo.save(model);
+        model = new StudentModel("name2", "deg");
+        model.setUniversity(u2);
+        studentRepo.save(model);
+        model = new StudentModel("name3", "deg");
+        model.setUniversity(u3);
+        studentRepo.save(model);
     }
 }

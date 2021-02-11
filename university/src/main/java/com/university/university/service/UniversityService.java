@@ -8,12 +8,19 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 @Service
 public class UniversityService {
 
     @Autowired
     private UniversityRepo universityRepo;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public List<UniversityModel> findAll() {
         var it = universityRepo.findAll();
@@ -22,6 +29,14 @@ public class UniversityService {
         it.forEach(e -> universities.add(e));
 
         return universities;
+    }
+
+    public Optional<UniversityModel> find(long id) {
+        return universityRepo.findById(id);
+    }
+
+    public void insert(UniversityModel university) {
+        universityRepo.save(university);
     }
 
     public Long count() {

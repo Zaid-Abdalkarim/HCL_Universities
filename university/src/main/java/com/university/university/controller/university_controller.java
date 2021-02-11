@@ -1,6 +1,8 @@
 package com.university.university.controller;
 
+import com.university.university.service.StudentService;
 import com.university.university.service.UniversityService;
+import com.university.university.model.StudentModel;
 import com.university.university.model.UniversityModel;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +19,18 @@ public class university_controller {
     @Autowired
     private UniversityService universityService;
 
+    @Autowired
+    private StudentService studentService;
+
     @GetMapping("/university")
-    public List<UniversityModel> allUsers() {
+    public List<UniversityModel> allUniversities() {
 
         return universityService.findAll();
+    }
+
+    @GetMapping("/students")
+    public List<StudentModel> allStudents() {
+        return studentService.findAll();
     }
 
     @GetMapping("/university/count")
