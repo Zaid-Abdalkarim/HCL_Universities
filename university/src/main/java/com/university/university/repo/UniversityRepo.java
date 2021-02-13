@@ -1,10 +1,7 @@
 package com.university.university.repo;
 
-import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 
-import com.university.university.model.StudentModel;
 import com.university.university.model.UniversityModel;
 
 import org.springframework.data.repository.CrudRepository;
