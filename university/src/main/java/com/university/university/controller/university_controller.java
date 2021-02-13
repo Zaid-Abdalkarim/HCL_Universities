@@ -6,14 +6,17 @@ import com.university.university.model.StudentModel;
 import com.university.university.model.UniversityModel;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.HashMap;
 
 @RestController
 public class university_controller {
@@ -24,33 +27,40 @@ public class university_controller {
     @Autowired
     private StudentService studentService;
 
+    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/university")
-    public List<UniversityModel> allUniversities() {
-
-        return universityService.findAll();
+    public ResponseEntity<List<UniversityModel>> allUniversities() {
+        return ResponseEntity.ok(universityService.findAll());
     }
 
+    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/students")
-    public List<StudentModel> allStudents() {
-        return studentService.findAll();
+    public ResponseEntity<List<StudentModel>> allStudents() {
+        return ResponseEntity.ok(studentService.findAll());
     }
 
+    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/university/count")
-    public Long count() {
+    public ResponseEntity<Long> count() {
 
-        return universityService.count();
+        return ResponseEntity.ok(universityService.count());
     }
 
+    @CrossOrigin(origins = "http://localhost:4200")
     @DeleteMapping("/university/{id}")
-    public void delete(@PathVariable String id) {
+    public ResponseEntity<Map<String, Boolean>> delete(@PathVariable String id) {
 
         Long universityId = Long.parseLong(id);
         universityService.deleteById(universityId);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("deleted", Boolean.TRUE);
+        return ResponseEntity.ok(response);
     }
 
+    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/university/{id}")
-    public List<StudentModel> allStudentsAttendingUniversityX(@PathVariable String id) {
+    public ResponseEntity<List<StudentModel>> allStudentsAttendingUniversityX(@PathVariable String id) {
         Optional<UniversityModel> uni = universityService.find(Long.parseLong(id));
-        return studentService.findByUniversity(uni.get());
+        return ResponseEntity.ok(studentService.findByUniversity(uni.get()));
     }
 }
