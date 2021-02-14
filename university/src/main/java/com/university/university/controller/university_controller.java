@@ -44,9 +44,14 @@ public class university_controller {
         return ResponseEntity.ok(universityService.count());
     }
 
+    /**
+     * delete a university from list of universities
+     * @param id
+     * @return
+     */
     @CrossOrigin(origins = "http://localhost:4200")
     @DeleteMapping("/university/{id}")
-    public ResponseEntity<Map<String, Boolean>> delete(@PathVariable String id) {
+    public ResponseEntity<Map<String, Boolean>> deleteUniversity(@PathVariable String id) {
 
         Long universityId = Long.parseLong(id);
         universityService.deleteById(universityId);
@@ -55,6 +60,11 @@ public class university_controller {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * get a list of all students attending a particular university with id: id
+     * @param id
+     * @return
+     */
     @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/university/{id}")
     public ResponseEntity<List<StudentModel>> allStudentsAttendingUniversityX(@PathVariable String id) {
@@ -69,7 +79,7 @@ public class university_controller {
     }
 
     /**
-     * note: spring boot automatically converts passed in json to a StuentModel object using @RequestBody
+     * note: spring boot automatically converts passed in json to a StudentModel object using @RequestBody
      * post a student to a specific university
      * @param studentModel
      * @return
@@ -86,5 +96,72 @@ public class university_controller {
             return ResponseEntity.ok(studentModel);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND); //https://stackoverflow.com/questions/22536059/how-to-return-not-found-status-from-spring-controller
+    }
+
+    /**
+     * delete a student
+     * @param id
+     * @return
+     */
+    @CrossOrigin(origins = "http://localhost:4200")
+    @DeleteMapping("/students/{id}")
+    public ResponseEntity<Map<String, Boolean>> deleteStudentFromUniversity(@PathVariable String id) {
+
+        Long studentID = Long.parseLong(id);
+        studentService.deleteById(studentID);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("deleted", Boolean.TRUE);
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Update a university
+     *
+     */
+    @CrossOrigin(origins = "http://localhost:4200")
+    @PutMapping("/university/{id}")
+    public ResponseEntity<UniversityModel> updateUniversity(@PathVariable String id, @RequestBody UniversityModel universityModel) {
+        Optional<UniversityModel> uni = universityService.find(Long.parseLong(id));
+
+        if (uni.isPresent()) {
+            UniversityModel university = uni.get();
+            university.setName(universityModel.getName());
+            universityService.insert(university);
+            return ResponseEntity.ok(universityModel);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND); //https://stackoverflow.com/questions/22536059/how-to-return-not-found-status-from-spring-controller
+    }
+
+    /**
+     * Update a student
+     */
+    @CrossOrigin(origins = "http://localhost:4200")
+    @PutMapping("/students/{id}")
+    public ResponseEntity<StudentModel> updateStudent(@PathVariable String id, @RequestBody StudentModel studentModel) {
+        Optional<StudentModel> stu = studentService.find(Long.parseLong(id));
+
+        if (stu.isPresent()) {
+            StudentModel student = stu.get();
+            //if statements to retain the other non updated info
+            if (studentModel.getName() != null)
+                student.setName(studentModel.getName());
+            if (studentModel.getDegree() != null)
+                student.setDegree(studentModel.getDegree());
+            if (studentModel.getUniversity() != null)
+                student.setUniversity(studentModel.getUniversity());
+            studentService.insert(student);
+            return ResponseEntity.ok(studentModel);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND); //https://stackoverflow.com/questions/22536059/how-to-return-not-found-status-from-spring-controller
+    }
+
+    /**
+     * get a student
+     * @return
+     */
+    @CrossOrigin(origins = "http://localhost:4200")
+    @GetMapping("/students/{id}")
+    public ResponseEntity<StudentModel> getStudentByID(@PathVariable String id) {
+        return ResponseEntity.ok(studentService.find(Long.parseLong(id)).get());
     }
 }
