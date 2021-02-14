@@ -5,13 +5,11 @@ import com.university.university.service.UniversityService;
 import com.university.university.model.StudentModel;
 import com.university.university.model.UniversityModel;
 
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -62,5 +60,31 @@ public class university_controller {
     public ResponseEntity<List<StudentModel>> allStudentsAttendingUniversityX(@PathVariable String id) {
         Optional<UniversityModel> uni = universityService.find(Long.parseLong(id));
         return ResponseEntity.ok(studentService.findByUniversity(uni.get()));
+    }
+
+    @CrossOrigin(origins = "http://localhost:4200")
+    @PostMapping("/university")
+    public UniversityModel postUniversity(@RequestBody UniversityModel universityModel) {
+        return universityService.postUniversity(universityModel);
+    }
+
+    /**
+     * note: spring boot automatically converts passed in json to a StuentModel object using @RequestBody
+     * post a student to a specific university
+     * @param studentModel
+     * @return
+     */
+    @CrossOrigin(origins = "http://localhost:4200")
+    @PostMapping("/university/{id}")
+    public ResponseEntity<StudentModel> postStudent(@PathVariable String id, @RequestBody StudentModel studentModel) {
+        //find the university with id: id
+        Optional<UniversityModel> uni = universityService.find(Long.parseLong(id));
+
+        if (uni.isPresent()) {
+            studentModel.setUniversity(uni.get()); //set student's university field
+            studentService.insert(studentModel);
+            return ResponseEntity.ok(studentModel);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND); //https://stackoverflow.com/questions/22536059/how-to-return-not-found-status-from-spring-controller
     }
 }
